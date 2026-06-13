@@ -1,0 +1,33 @@
+{
+  "heirs": [
+    {
+      "name": "Jobert Carzo Celestia",
+      "status": "active"
+    },
+    {
+      "name": "Carlos Celestia Gaspari",
+      "status": "active"
+    },
+    {
+      "name": "Seph Celestia Raven",
+      "status": "active"
+    },
+    {
+      "name": "Mori Celestia Raven",
+      "status": "active"
+    }
+  ],
+  "reservedHeirs": [
+    {
+      "name": "Ahrisa Prodigy Celestia",
+      "status": "active"
+    },
+    {
+      "name": "KT Celestia",
+      "status": "active"
+    }
+  ],
+  "messageIds": [
+    "1515392355279179856"
+  ]
+}
