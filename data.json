@@ -15,6 +15,14 @@
     {
       "name": "Mori Celestia Raven",
       "status": "active"
+    },
+    {
+      "name": "Malik Celestia",
+      "status": "active"
+    },
+    {
+      "name": "TEST",
+      "status": "active"
     }
   ],
   "reservedHeirs": [
@@ -28,6 +36,6 @@
     }
   ],
   "messageIds": [
-    "1515392355279179856"
+    "1515488383009423451"
   ]
 }

@@ -18,6 +18,10 @@ const commands = [
                 .setRequired(true)
         ),
 
+        new SlashCommandBuilder()
+    .setName('testregistry')
+    .setDescription('Generate a registry image'),
+
 new SlashCommandBuilder()
     .setName('renameheir')
     .setDescription('Rename an heir')

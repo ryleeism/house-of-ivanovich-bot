@@ -7,6 +7,8 @@ const {
     AttachmentBuilder
 } = require('discord.js');
 
+const { generateRegistry } = require('./generators/registryCard');
+
 const fs = require('fs');
 const path = require('path');
 
@@ -29,17 +31,34 @@ function saveData(data) {
     );
 }
 
-function getSuffix(num) {
-    if (num % 100 >= 11 && num % 100 <= 13) {
-        return 'TH';
+function toRoman(num) {
+
+    const values = [
+        [1000, "M"],
+        [900, "CM"],
+        [500, "D"],
+        [400, "CD"],
+        [100, "C"],
+        [90, "XC"],
+        [50, "L"],
+        [40, "XL"],
+        [10, "X"],
+        [9, "IX"],
+        [5, "V"],
+        [4, "IV"],
+        [1, "I"]
+    ];
+
+    let result = "";
+
+    for (const [value, numeral] of values) {
+        while (num >= value) {
+            result += numeral;
+            num -= value;
+        }
     }
 
-    switch (num % 10) {
-        case 1: return 'ST';
-        case 2: return 'ND';
-        case 3: return 'RD';
-        default: return 'TH';
-    }
+    return result;
 }
 
 function formatHeir(rank, heir) {
@@ -109,46 +128,35 @@ async function updateFamily(channel) {
                 )
             );
 
-        const heirText =
-            pages[page]
-                .map((heir, index) => {
-
-                    const rank =
-                        page * 20 +
-                        index +
-                        1;
-
-                    return formatHeir(
-                        rank,
-                        heir
-                    );
-
-                })
-                .join('\n');
+        const heirText = heirs
+    .map((heir, index) =>
+        `${toRoman(index + 1)}. ${heir.name}`
+    )
+    .join('\n');
 
         const embed =
             new EmbedBuilder()
                 .setColor('#D4AF37')
-                .setTitle('⚜ HOUSE OF IVANOVICH')
+                .setTitle('⚜ 𝐇𝐎𝐔𝐒𝐄 𝐎𝐅 𝐈𝐕𝐀𝐍𝐎𝐕𝐈𝐂𝐇')
                 .setThumbnail('attachment://logo.png')
                 .setImage('attachment://banner.png')
                 .setFooter({
                     text:
-                        'Bloodline Above All.'
+                        'We don\'t chase powers, we\'re born to rule.'
                 });
 
         if (page === 0) {
 
             embed.setDescription(
-`👑 **THE SOVEREIGN**
-RYLEE CELESTIA IVANOVICH
+`👑 **𝐓𝐇𝐄 𝐒𝐎𝐕𝐄𝐑𝐄𝐈𝐆𝐍**
+Rylee Celestia Ivanovich
 
 ━━━━━━━━━━━━━━━━━━
 
-⚜ **THE HEIRS**
+⚜ **𝐓𝐇𝐄 𝐇𝐄𝐈𝐑𝐒**
 
-${heirText || 'No heirs recorded.'}`
-            );
+${heirText}`
+);
 
         } else {
 
@@ -166,19 +174,18 @@ ${heirText}`
             );
 
         await msg.edit({
-            content: '',
-            embeds: [embed],
-            files: [
-                logo,
-                banner
-            ]
-        });
+    content: '',
+    embeds: [embed],
+    files: [
+        logo,
+        banner
+    ]
+});
+
     }
 }
 
-client.once(
-    'ready',
-    () => {
+client.once('clientReady', () => {
 
         console.log(
             `${client.user.tag} online`
@@ -225,6 +232,22 @@ client.on(
             });
 
         }
+
+    if (interaction.commandName === 'testregistry') {
+
+    const image = await generateRegistry(data);
+
+    const attachment = new AttachmentBuilder(
+        image,
+        {
+            name: 'registry.png'
+        }
+    );
+
+    return interaction.reply({
+        files: [attachment]
+    });
+}
 
 if (interaction.commandName === 'removeheir') {
 
